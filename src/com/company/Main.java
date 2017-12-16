@@ -16,9 +16,11 @@ public class Main {
             try(BufferedReader br = new BufferedReader(new FileReader("resource/password.txt"))){
             sPas1 = br.readLine();
                 //System.out.println(sPas1);
+                br.close();
             }catch (IOException e) {
             e.printStackTrace();
         }
+
 
         try {
             sPas = getContent(is);
