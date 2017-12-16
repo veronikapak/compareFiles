@@ -1,26 +1,38 @@
 package com.company;
 
-import com.oracle.tools.packager.IOUtils;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String s = "";
         s = writeTofile();
 
         String sPas ="";
         InputStream is = Main.class.getResourceAsStream("/password.txt");
-         try {
+
+        //String fileName = "resource/password.txt";
+        String sPas1 = "";
+            try(BufferedReader br = new BufferedReader(new FileReader("resource/password.txt"))){
+            sPas1 = br.readLine();
+                //System.out.println(sPas1);
+            }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
             sPas = getContent(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (sPas.equals(s)){
+            System.out.println("Your password is correct");
+        }else{
+            System.out.println("Your password wrong");
+        }
+
+        if (sPas1.equals(s)){
             System.out.println("Your password is correct");
         }else{
             System.out.println("Your password wrong");
@@ -61,7 +73,7 @@ public class Main {
     }
 
     private static String getContent(InputStream inputStream) throws IOException {
-        byte[] buff = new byte[64];
+        byte[] buff = new byte[inputStream.available()];
         while (inputStream.available()>0){
             int read = inputStream.read(buff);
             if (read==-1){
@@ -69,14 +81,8 @@ public class Main {
                 break;
             }
         }
-        String str="";
-        for (byte f :buff) {
-            if (f!=0 && f!=10 && f!=13){
-                str+= (char)f;
-            }
-        }
         inputStream.close();
-        return str;
+        return new String(buff); //str;
         //String result = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
     }
 }
